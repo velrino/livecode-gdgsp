@@ -92,6 +92,25 @@ $app->singleton(
 | can respond to, as well as the controllers that may handle them.
 |
 */
+/*
+| DINGO
+*/
+$app->register(Dingo\Api\Provider\LumenServiceProvider::class);
+
+$app['Dingo\Api\Transformer\Factory']->setAdapter(function ($app) {
+    return new Dingo\Api\Transformer\Adapter\Fractal(new League\Fractal\Manager, 'include', ',');
+});
+
+$app['Dingo\Api\Exception\Handler']->setErrorFormat([
+    'error' => [
+        'message' => ':message',
+        'errors' => ':errors',
+        'code' => ':code',
+        'status_code' => ':status_code',
+        #'debug' => ':debug'
+    ]
+]);
+
 
 $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
     require __DIR__.'/../app/Http/routes.php';
