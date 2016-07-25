@@ -6,9 +6,23 @@ $api = $app['api.router'];
 
 $api->version('v1', function ($api) use ($app) {
 
-  $api->get('/', function () use ($api)
+  $api->group(['namespace' => 'App\Http\Controllers'], function ($api)
   {
-    return ["Projec" => "Livecode"];
+    $api->get('/', ['uses' => 'LivecodeController@project']);
+
+    $api->group(['prefix' => 'users'], function ($api)
+    {
+        $api->get('/', ['uses' => 'LivecodeController@list']);
+        $api->post('/', ['uses' => 'LivecodeController@insert']);
+
+        $api->group(['prefix' => '{document:[0-9]+}'], function ($api)
+        {
+            $api->get('/', ['uses' => 'LivecodeController@get']);
+            $api->put('/', ['uses' => 'LivecodeController@update']);
+            $api->delete('/', ['uses' => 'LivecodeController@delete']);
+        });
+
+    });
   });
 
 });

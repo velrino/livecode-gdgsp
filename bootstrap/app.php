@@ -23,9 +23,9 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-// $app->withFacades();
-
-// $app->withEloquent();
+$app->register('Jenssegers\Mongodb\MongodbServiceProvider');
+$app->withFacades();
+$app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -115,5 +115,7 @@ $app['Dingo\Api\Exception\Handler']->setErrorFormat([
 $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
     require __DIR__.'/../app/Http/routes.php';
 });
+
+class_alias('App\Http\Controllers\BaseController', 'BaseController');
 
 return $app;
